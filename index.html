@@ -1,0 +1,1581 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>03:17 — THE LAST ROOM</title>
+
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;background:#050505;color:#ddd;font-family:Arial,sans-serif}
+body{overflow-x:hidden}
+button,input{font:inherit}
+button{cursor:pointer}
+
+:root{
+ --red:#b00000;
+ --darkred:#430000;
+ --acid:#d7ff00;
+ --gray:#777;
+}
+
+/* INTRO */
+
+#intro{
+ position:fixed;
+ inset:0;
+ z-index:9999;
+ background:#000;
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ text-align:center;
+}
+
+.introBox{width:90%;max-width:600px}
+
+.eye{
+ width:180px;
+ height:110px;
+ margin:20px auto;
+ border:2px solid #4d0000;
+ border-radius:50% 0 50% 0;
+ transform:rotate(45deg);
+ position:relative;
+ box-shadow:0 0 50px #400;
+}
+
+.eye:before{
+ content:"";
+ position:absolute;
+ width:45px;height:45px;
+ background:#800000;
+ border-radius:50%;
+ left:65px;top:30px;
+ box-shadow:0 0 25px #f00000;
+}
+
+.eye:after{
+ content:"";
+ position:absolute;
+ width:12px;height:12px;
+ background:#000;
+ border-radius:50%;
+ left:82px;top:47px;
+}
+
+.introSmall{
+ color:#650000;
+ font-size:9px;
+ letter-spacing:5px;
+}
+
+#timer{
+ font-size:80px;
+ color:#a00000;
+ text-shadow:0 0 30px #800;
+ margin:10px;
+}
+
+#enter{
+ display:none;
+ background:#080808;
+ border:1px solid #a00000;
+ color:#ddd;
+ padding:17px 35px;
+ letter-spacing:5px;
+}
+
+/* HEADER */
+
+header{
+ padding:22px 15px;
+ border-bottom:1px solid #270000;
+ text-align:center;
+}
+
+.logo{
+ color:#a00000;
+ font-size:21px;
+ letter-spacing:7px;
+}
+
+.status{
+ color:#444;
+ font-size:8px;
+ letter-spacing:3px;
+ margin-top:8px;
+}
+
+/* MENU */
+
+#menu,#page{
+ width:94%;
+ max-width:1000px;
+ margin:25px auto 70px;
+}
+
+.menuIntro{
+ padding:20px;
+ border:1px solid #222;
+ background:#080808;
+ margin-bottom:15px;
+}
+
+.menuIntro h1{
+ font-size:25px;
+ margin:0 0 10px;
+}
+
+.menuIntro p{
+ color:#666;
+ font-size:12px;
+ line-height:1.7;
+}
+
+.grid{
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:10px;
+}
+
+.card{
+ min-height:180px;
+ border:1px solid #252525;
+ background:#080808;
+ position:relative;
+ overflow:hidden;
+ padding:18px;
+ transition:.25s;
+}
+
+.card:active{
+ transform:scale(.97);
+ border-color:#900;
+}
+
+.cardArt{
+ position:absolute;
+ inset:0;
+ opacity:.28;
+ background:
+ radial-gradient(circle at 70% 30%,#850000 0,transparent 28%),
+ linear-gradient(130deg,#111,#020202);
+}
+
+.cardContent{
+ position:relative;
+ z-index:2;
+}
+
+.number{
+ color:#720000;
+ font-size:9px;
+ letter-spacing:4px;
+}
+
+.card h2{
+ font-size:15px;
+ letter-spacing:2px;
+ margin:12px 0;
+}
+
+.card p{
+ color:#666;
+ font-size:10px;
+ line-height:1.5;
+}
+
+.progress{
+ color:#555;
+ font-size:9px;
+ margin-top:20px;
+}
+
+/* PAGE */
+
+#page{display:none}
+
+.back{
+ color:#8b0000;
+ font-size:10px;
+ letter-spacing:3px;
+ margin-bottom:20px;
+ display:block;
+}
+
+.pageTitle{
+ color:#a00000;
+ font-size:28px;
+ letter-spacing:4px;
+}
+
+.pageSub{
+ color:#555;
+ font-size:9px;
+ letter-spacing:3px;
+ margin:8px 0 25px;
+}
+
+.panel{
+ background:#080808;
+ border:1px solid #222;
+ padding:20px;
+ margin-bottom:14px;
+}
+
+.panel h3{margin-top:0}
+.panel p{
+ color:#777;
+ font-size:12px;
+ line-height:1.8;
+}
+
+.red{color:#b00000!important}
+.acid{color:var(--acid)!important}
+
+.btn{
+ width:100%;
+ background:#050505;
+ border:1px solid #470000;
+ color:#ddd;
+ padding:14px;
+ margin-top:9px;
+ letter-spacing:2px;
+}
+
+.btn:active{
+ background:#800000;
+}
+
+input{
+ width:100%;
+ background:#020202;
+ border:1px solid #333;
+ padding:14px;
+ color:white;
+ outline:none;
+ text-align:center;
+ letter-spacing:6px;
+}
+
+/* ROOM */
+
+.room{
+ height:440px;
+ position:relative;
+ overflow:hidden;
+ border:1px solid #360000;
+ background:
+ linear-gradient(90deg,#050505,#141414 50%,#030303);
+}
+
+.ceiling{
+ position:absolute;
+ top:0;left:0;right:0;
+ height:90px;
+ background:#0b0b0b;
+}
+
+.floor{
+ position:absolute;
+ bottom:0;left:0;right:0;
+ height:130px;
+ background:linear-gradient(170deg,#111,#020202);
+ transform:perspective(300px) rotateX(8deg);
+}
+
+.door{
+ position:absolute;
+ width:110px;height:230px;
+ top:85px;left:50%;
+ transform:translateX(-50%);
+ background:#040404;
+ border:3px solid #1b1b1b;
+}
+
+.door:after{
+ content:"";
+ position:absolute;
+ right:12px;
+ top:120px;
+ width:7px;height:7px;
+ border-radius:50%;
+ background:#777;
+}
+
+.mirror{
+ position:absolute;
+ right:20px;
+ top:80px;
+ width:85px;height:145px;
+ border:3px solid #292929;
+ background:
+ radial-gradient(ellipse,#303030,#080808 70%);
+}
+
+.mirror:before{
+ content:"";
+ position:absolute;
+ width:20px;height:65px;
+ background:#050505;
+ left:30px;top:35px;
+ border-radius:50%;
+}
+
+.table{
+ position:absolute;
+ left:20px;
+ bottom:100px;
+ width:125px;
+ height:65px;
+ background:#111;
+ border:2px solid #222;
+}
+
+.phone{
+ position:absolute;
+ left:55px;
+ bottom:135px;
+ width:35px;
+ height:50px;
+ background:#020202;
+ border:1px solid #777;
+}
+
+.clock{
+ position:absolute;
+ left:25px;
+ top:30px;
+ width:55px;height:55px;
+ border:2px solid #555;
+ border-radius:50%;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:8px;
+ color:#a00000;
+}
+
+.roomObj{
+ cursor:pointer;
+ transition:.2s;
+}
+
+.roomObj:active{
+ filter:brightness(2);
+}
+
+/* INVENTORY */
+
+.inventory{
+ display:flex;
+ flex-wrap:wrap;
+ gap:7px;
+ margin-bottom:15px;
+}
+
+.item{
+ padding:7px 10px;
+ border:1px solid #333;
+ color:#777;
+ font-size:9px;
+}
+
+/* GALLERY */
+
+.gallery{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:10px;
+}
+
+.photo{
+ height:190px;
+ border:1px solid #292929;
+ position:relative;
+ overflow:hidden;
+ background:#0b0b0b;
+}
+
+.photo svg{
+ width:100%;
+ height:100%;
+}
+
+.photoLabel{
+ position:absolute;
+ left:8px;
+ bottom:8px;
+ color:#777;
+ font-size:8px;
+ letter-spacing:2px;
+}
+
+/* FILES */
+
+.file{
+ border:1px solid #222;
+ background:#060606;
+ padding:16px;
+ margin:8px 0;
+}
+
+.file:active{
+ border-color:#900;
+}
+
+/* QUESTIONS */
+
+.answer{
+ width:100%;
+ padding:15px;
+ margin:6px 0;
+ border:1px solid #292929;
+ background:#060606;
+ color:#aaa;
+ text-align:left;
+}
+
+/* EFFECTS */
+
+.shake{
+ animation:shake .08s infinite;
+}
+
+@keyframes shake{
+ 0%{transform:translate(0)}
+ 25%{transform:translate(5px,-3px)}
+ 50%{transform:translate(-4px,4px)}
+ 75%{transform:translate(3px,2px)}
+ 100%{transform:translate(0)}
+}
+
+.invert{
+ filter:invert(1);
+}
+
+.flash{
+ position:fixed;
+ inset:0;
+ z-index:8000;
+ background:var(--acid);
+ pointer-events:none;
+ animation:flash .3s;
+}
+
+@keyframes flash{
+ 0%{opacity:1}
+ 100%{opacity:0}
+}
+
+@media(max-width:600px){
+ .grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+
+<!-- INTRO -->
+
+<div id="intro">
+ <div class="introBox">
+
+  <div class="introSmall">CONNECTION ESTABLISHED</div>
+
+  <div class="eye"></div>
+
+  <div class="introSmall">SOMEONE IS ALREADY INSIDE</div>
+
+  <div id="timer">03</div>
+
+  <p id="introText">DO NOT ENTER</p>
+
+  <button id="enter" onclick="enter()">ENTER ANYWAY</button>
+
+ </div>
+</div>
+
+
+<div id="site">
+
+<header>
+ <div class="logo">03:17 // THE LAST ROOM</div>
+ <div class="status">
+ SYSTEM ONLINE · FILES 0/17 · CLUES 0/12
+ </div>
+</header>
+
+
+<!-- MENU -->
+
+<div id="menu">
+
+ <div class="menuIntro">
+  <h1>Ти справді хочеш продовжити?</h1>
+  <p>
+   Тут немає головної історії, яку треба просто прочитати.
+   Її треба <span class="red">зібрати самому</span>.
+   Шукай предмети, коди, фотографії та речі, які не повинні тут бути.
+  </p>
+ </div>
+
+
+ <div class="grid">
+
+  <div class="card" onclick="openPage('room')">
+   <div class="cardArt"></div>
+   <div class="cardContent">
+    <div class="number">01</div>
+    <h2>THE LAST ROOM</h2>
+    <p>Дослідження кімнати.</p>
+    <div class="progress" id="roomProgress">0 / 8 objects</div>
+   </div>
+  </div>
+
+
+  <div class="card" onclick="openPage('archive')">
+   <div class="cardArt"></div>
+   <div class="cardContent">
+    <div class="number">02</div>
+    <h2>SECRET ARCHIVE</h2>
+    <p>17 справ. Одна з них про тебе.</p>
+    <div class="progress">0 / 17 files</div>
+   </div>
+  </div>
+
+
+  <div class="card" onclick="openPage('gallery')">
+   <div class="cardArt"></div>
+   <div class="cardContent">
+    <div class="number">03</div>
+    <h2>THE GALLERY</h2>
+    <p>Дивись уважно. Не всі деталі залишаються.</p>
+    <div class="progress">0 / 12 clues</div>
+   </div>
+  </div>
+
+
+  <div class="card" onclick="openPage('puzzles')">
+   <div class="cardArt"></div>
+   <div class="cardContent">
+    <div class="number">04</div>
+    <h2>PUZZLE ROOM</h2>
+    <p>Коди, шифри та приховані підказки.</p>
+    <div class="progress">LEVEL 01</div>
+   </div>
+  </div>
+
+
+  <div class="card" onclick="openPage('test')">
+   <div class="cardArt"></div>
+   <div class="cardContent">
+    <div class="number">05</div>
+    <h2>PSYCHO TEST</h2>
+    <p>20 ситуацій. Жодна відповідь не є правильною.</p>
+    <div class="progress">0 / 20</div>
+   </div>
+  </div>
+
+
+  <div class="card" onclick="openPage('incidents')">
+   <div class="cardArt"></div>
+   <div class="cardContent">
+    <div class="number">06</div>
+    <h2>INCIDENTS</h2>
+    <p>Розслідуй події, яких офіційно не існувало.</p>
+    <div class="progress">0 / 5 cases</div>
+   </div>
+  </div>
+
+
+  <div class="card" onclick="openPage('lab')">
+   <div class="cardArt"></div>
+   <div class="cardContent">
+    <div class="number">07</div>
+    <h2>EXPERIMENTS</h2>
+    <p>Деякі експерименти реагують на тебе.</p>
+    <div class="progress">0 / 10</div>
+   </div>
+  </div>
+
+
+  <div class="card" onclick="openPage('door')">
+   <div class="cardArt"></div>
+   <div class="cardContent">
+    <div class="number">08</div>
+    <h2>DO NOT OPEN</h2>
+    <p>Ти знаєш, що треба зробити.</p>
+    <div class="progress">LOCKED</div>
+   </div>
+  </div>
+
+
+  <div class="card" onclick="secret()">
+   <div class="cardArt"></div>
+   <div class="cardContent">
+    <div class="number">09</div>
+    <h2>██████</h2>
+    <p>ACCESS DENIED</p>
+    <div class="progress">???</div>
+   </div>
+  </div>
+
+ </div>
+</div>
+
+
+<div id="page"></div>
+
+</div>
+
+
+<script>
+
+/* GAME STATE */
+
+let inventory=[];
+let objectsFound=0;
+let galleryFound=0;
+let clues=0;
+
+function has(item){
+ return inventory.includes(item);
+}
+
+function add(item){
+
+ if(!has(item)){
+  inventory.push(item);
+  alert("ОТРИМАНО: "+item);
+ }
+
+}
+
+function inventoryHTML(){
+
+ return `
+ <div class="inventory">
+ ${inventory.length
+ ? inventory.map(x=>`<div class="item">${x}</div>`).join("")
+ : `<div class="item">EMPTY</div>`}
+ </div>
+ `;
+
+}
+
+
+/* INTRO */
+
+let t=3;
+
+let timer=setInterval(()=>{
+
+ t--;
+
+ document.getElementById("timer").innerText="0"+t;
+
+ if(t<=0){
+
+  clearInterval(timer);
+
+  document.getElementById("timer").style.display="none";
+
+  document.getElementById("introText").innerHTML=
+  '<span class="red">ВОНА ВЖЕ ВІДКРИЛА ДВЕРІ.</span>';
+
+  document.getElementById("enter").style.display="inline-block";
+
+ }
+
+},1000);
+
+
+function enter(){
+
+ document.getElementById("intro").style.display="none";
+ document.getElementById("site").style.display="block";
+
+}
+
+
+/* NAVIGATION */
+
+function openPage(type){
+
+ document.getElementById("menu").style.display="none";
+
+ let page=document.getElementById("page");
+
+ page.style.display="block";
+
+
+ if(type==="room") roomPage();
+ if(type==="archive") archivePage();
+ if(type==="gallery") galleryPage();
+ if(type==="puzzles") puzzlePage();
+ if(type==="test") testPage();
+ if(type==="incidents") incidentPage();
+ if(type==="lab") labPage();
+ if(type==="door") doorPage();
+
+ window.scrollTo(0,0);
+
+}
+
+
+function back(){
+
+ document.getElementById("page").style.display="none";
+ document.getElementById("menu").style.display="block";
+
+ window.scrollTo(0,0);
+
+}
+
+
+/* ROOM */
+
+function roomPage(){
+
+ document.getElementById("page").innerHTML=`
+
+ <div class="back" onclick="back()">← BACK</div>
+
+ <div class="pageTitle">THE LAST ROOM</div>
+
+ <div class="pageSub">03:17 · OBJECTS FOUND ${objectsFound}/8</div>
+
+ ${inventoryHTML()}
+
+ <div class="panel">
+ <p>
+ Ти заходиш у кімнату.
+ </p>
+
+ <p class="red">
+ Нічого не чіпай, поки не зрозумієш, де знаходишся.
+ </p>
+
+ <div class="room">
+
+  <div class="ceiling"></div>
+  <div class="floor"></div>
+
+  <div class="clock roomObj"
+   onclick="clockClick()">
+  </div>
+
+  <div class="door roomObj"
+   onclick="doorClick()">
+  </div>
+
+  <div class="mirror roomObj"
+   onclick="mirrorClick()">
+  </div>
+
+  <div class="table"></div>
+
+  <div class="phone roomObj"
+   onclick="phoneClick()">
+  </div>
+
+ </div>
+
+ <p id="roomText"></p>
+
+ </div>
+ `;
+
+}
+
+
+/* ROOM EVENTS */
+
+function clockClick(){
+
+ objectsFound++;
+
+ document.getElementById("roomText").innerHTML=
+ `
+ <span class="red">ГОДИННИК — 03:17</span><br><br>
+ Він не рухається.<br><br>
+ Але секундна стрілка щойно перескочила назад.
+ <br><br>
+ На задній частині є маленьке число:
+ <span class="red">17</span>.
+ `;
+
+ if(objectsFound>=1) add("CLUE 17");
+
+}
+
+
+function doorClick(){
+
+ objectsFound++;
+
+ let text;
+
+ if(!has("KEY")){
+  text=
+  `<span class="red">ДВЕРІ ЗАМКНЕНІ.</span><br><br>
+  З іншого боку чути три удари.<br><br>
+  Тук.<br>
+  Тук.<br>
+  Тук.`;
+ }else{
+  text=
+  `<span class="acid">КЛЮЧ ПІДХОДИТЬ.</span><br><br>
+  Але ти ще не знаєш, чи варто відкривати.`;
+ }
+
+ document.getElementById("roomText").innerHTML=text;
+
+}
+
+
+function mirrorClick(){
+
+ objectsFound++;
+
+ document.body.classList.add("shake");
+
+ setTimeout(()=>{
+  document.body.classList.remove("shake");
+ },500);
+
+ document.getElementById("roomText").innerHTML=
+ `
+ <span class="red">Ти дивишся в дзеркало.</span><br><br>
+ Спочатку все нормально.<br><br>
+ Потім твоє відображення перестає повторювати рухи.<br><br>
+ <span class="red">Воно піднімає руку.</span>
+ `;
+
+}
+
+
+function phoneClick(){
+
+ objectsFound++;
+
+ document.getElementById("roomText").innerHTML=
+ `
+ <span class="red">ТЕЛЕФОН</span><br><br>
+ На екрані: 03:17<br><br>
+ Є одне повідомлення.
+ <br><br>
+ <span class="acid">
+ «НЕ БЕРИ КЛЮЧ ІЗ ШАФИ».
+ </span>
+ `;
+
+ add("PHONE MESSAGE");
+
+}
+
+
+/* ARCHIVE */
+
+function archivePage(){
+
+ document.getElementById("page").innerHTML=`
+
+ <div class="back" onclick="back()">← BACK</div>
+
+ <div class="pageTitle">SECRET ARCHIVE</div>
+
+ <div class="pageSub">17 FILES · 3 CORRUPTED</div>
+
+ <div class="panel">
+ <p>
+ Частина файлів виглядає старшою за сам сайт.
+ </p>
+ <p class="red">
+ Один файл має твоє ім'я.
+ </p>
+ </div>
+
+ <div id="files"></div>
+
+ `;
+
+ let files="";
+
+ for(let i=1;i<=17;i++){
+
+  let status=i===17
+  ?"████████"
+  :"CASE "+String(i).padStart(3,"0");
+
+  files+=`
+  <div class="file" onclick="fileClick(${i})">
+   <small class="red">${status}</small>
+   <h3>
+   ${i===4?"03:17":
+     i===7?"THE EMPTY ROOM":
+     i===11?"THE SECOND PERSON":
+     i===17?"YOU":
+     "UNKNOWN INCIDENT"}
+   </h3>
+   <p>STATUS: ${i%3===0?"CORRUPTED":"AVAILABLE"}</p>
+  </div>
+  `;
+
+ }
+
+ document.getElementById("files").innerHTML=files;
+
+}
+
+
+function fileClick(n){
+
+ let message="";
+
+ if(n===4){
+
+  message=
+  "CASE 004\n\n"+
+  "Час: 03:17\n"+
+  "Кімната: остання\n\n"+
+  "Свідок повідомив, що людина зайшла одна.\n\n"+
+  "Камера показала дві тіні.";
+
+ }
+
+ else if(n===7){
+
+  message=
+  "CASE 007\n\n"+
+  "Кімната була порожня.\n\n"+
+  "Але хтось знаходився всередині.";
+
+ }
+
+ else if(n===11){
+
+  message=
+  "CASE 011\n\n"+
+  "Друга людина не має відображення.";
+
+ }
+
+ else if(n===17){
+
+  message=
+  "ACCESS DENIED\n\n"+
+  "Тобі ще рано це читати.";
+
+ }
+
+ else{
+
+  message=
+  "FILE "+n+"\n\n"+
+  "Файл пошкоджений.\n\n"+
+  "Внизу сторінки хтось написав:\n\n"+
+  "\"17\"";
+
+ }
+
+ alert(message);
+
+}
+
+
+/* GALLERY */
+
+function galleryPage(){
+
+ document.getElementById("page").innerHTML=`
+
+ <div class="back" onclick="back()">← BACK</div>
+
+ <div class="pageTitle">THE GALLERY</div>
+
+ <div class="pageSub">LOOK CLOSER</div>
+
+ <div class="panel">
+ <p>
+ Тут немає випадкових деталей.
+ </p>
+ </div>
+
+ <div class="gallery">
+
+ ${photoSVG(1)}
+ ${photoSVG(2)}
+ ${photoSVG(3)}
+ ${photoSVG(4)}
+ ${photoSVG(5)}
+ ${photoSVG(6)}
+ ${photoSVG(7)}
+ ${photoSVG(8)}
+
+ </div>
+
+ <div class="panel">
+ <p id="galleryText">
+ Вибери фотографію.
+ </p>
+ </div>
+
+ `;
+
+}
+
+
+function photoSVG(n){
+
+ return `
+ <div class="photo" onclick="photoClick(${n})">
+
+ <svg viewBox="0 0 300 200">
+
+ <rect width="300" height="200" fill="#090909"/>
+
+ ${
+ n===1
+ ?`
+ <rect x="100" y="30" width="100" height="145" fill="#151515"/>
+ <circle cx="150" cy="75" r="25" fill="#222"/>
+ <polygon points="120,100 180,100 205,175 95,175" fill="#111"/>
+ `
+ :n===2
+ ?`
+ <rect x="35" y="25" width="230" height="150" fill="#101010"/>
+ <line x1="150" y1="25" x2="150" y2="175" stroke="#333"/>
+ <circle cx="220" cy="90" r="12" fill="#4d0000"/>
+ `
+ :n===3
+ ?`
+ <polygon points="0,180 110,100 300,180" fill="#151515"/>
+ <rect x="120" y="45" width="70" height="110" fill="#050505"/>
+ <circle cx="155" cy="75" r="12" fill="#500"/>
+ `
+ :n===4
+ ?`
+ <rect x="55" y="35" width="190" height="130" fill="#151515"/>
+ <circle cx="150" cy="80" r="28" fill="#333"/>
+ <polygon points="115,110 185,110 210,165 90,165" fill="#202020"/>
+ `
+ :n===5
+ ?`
+ <path d="M0 160 Q70 60 150 160 T300 160" fill="#181818"/>
+ <circle cx="75" cy="80" r="9" fill="#800000"/>
+ `
+ :n===6
+ ?`
+ <rect x="40" y="30" width="220" height="140" fill="#111"/>
+ <text x="75" y="105" fill="#700000" font-size="22">03:17</text>
+ `
+ :n===7
+ ?`
+ <rect x="90" y="20" width="120" height="160" fill="#111"/>
+ <circle cx="150" cy="70" r="20" fill="#292929"/>
+ <line x1="120" y1="110" x2="180" y2="150" stroke="#600000" stroke-width="5"/>
+ `
+ :`
+ <rect x="60" y="30" width="180" height="140" fill="#111"/>
+ <circle cx="120" cy="80" r="20" fill="#222"/>
+ <circle cx="180" cy="80" r="20" fill="#222"/>
+ <text x="105" y="145" fill="#900000" font-size="18">17</text>
+ `
+ }
+
+ </svg>
+
+ <div class="photoLabel">IMAGE 00${n}</div>
+
+ </div>
+ `;
+
+}
+
+
+function photoClick(n){
+
+ galleryFound++;
+
+ let messages=[
+ "",
+ "На фото одна людина. Але її тінь дивиться в інший бік.",
+ "У вікні видно червону крапку.",
+ "На дверях є символ. Ти вже бачив його.",
+ "Обличчя закрите, але відображення — ні.",
+ "У кутку стоїть хтось, кого не видно на першому погляді.",
+ "Годинник показує 03:17.",
+ "На фотографії дві людини. У файлі написано: ОДНА.",
+ "Число 17. Воно знову тут."
+ ];
+
+ document.getElementById("galleryText").innerHTML=
+ `<span class="red">IMAGE 00${n}</span><br><br>${messages[n]}`;
+
+ if(n===8) add("PHOTO 17");
+
+}
+
+
+/* PUZZLES */
+
+function puzzlePage(){
+
+ document.getElementById("page").innerHTML=`
+
+ <div class="back" onclick="back()">← BACK</div>
+
+ <div class="pageTitle">PUZZLE ROOM</div>
+
+ <div class="pageSub">LEVEL 01</div>
+
+ <div class="panel">
+
+ <h3>ПЕРША ЗАГАДКА</h3>
+
+ <p>
+ Який час постійно повторюється в архіві,
+ кімнаті та фотографіях?
+ </p>
+
+ <input id="code1" placeholder="TIME">
+
+ <button class="btn" onclick="check1()">
+ UNLOCK
+ </button>
+
+ <p id="puzzleResult"></p>
+
+ </div>
+
+ <div class="panel">
+
+ <h3>ДРУГА ЗАГАДКА</h3>
+
+ <p>
+ Скільки пальців потрібно, щоб відкрити
+ двері, якщо ключа немає?
+ </p>
+
+ <button class="btn" onclick="riddle()">
+ ANSWER
+ </button>
+
+ <p id="riddleResult"></p>
+
+ </div>
+
+ `;
+
+}
+
+
+function check1(){
+
+ let v=document.getElementById("code1").value.trim();
+
+ if(v==="0317"||v==="03:17"){
+
+  document.getElementById("puzzleResult").innerHTML=
+  `<span class="acid">LEVEL COMPLETE.</span><br><br>
+  Ти отримав ключ.`;
+
+  add("KEY");
+
+ }else{
+
+  document.getElementById("puzzleResult").innerText=
+  "Ні. Шукай уважніше.";
+
+ }
+
+}
+
+
+function riddle(){
+
+ document.getElementById("riddleResult").innerHTML=
+ `<span class="red">ЖОДНОГО.</span><br><br>
+ Двері не відкриваються пальцями.`;
+
+}
+
+
+/* TEST */
+
+let question=0;
+let score=0;
+
+function testPage(){
+
+ question=0;
+ score=0;
+
+ showQuestion();
+
+}
+
+
+const questions=[
+ ["Ти чуєш кроки позаду. Обернешся?",["Так","Ні"]],
+ ["У дзеркалі хтось стоїть. Ти моргнеш?",["Так","Ні"]],
+ ["Знайшов чужий телефон. Візьмеш?",["Так","Ні"]],
+ ["Двері самі відкрилися. Зайдеш?",["Так","Ні"]],
+ ["Чуєш своє ім'я з іншої кімнати.",["Піду туди","Залишусь"]],
+ ["Хтось стукає тричі.",["Відкрити","Не відкривати"]],
+ ["Знайшов фото себе, якого не робив.",["Заберу","Залишу"]],
+ ["На телефоні повідомлення від тебе.",["Прочитаю","Видалю"]],
+ ["Тінь рухається сама.",["Дивитись","Втекти"]],
+ ["Остання кнопка каже НЕ НАТИСКАТИ.",["Натисну","Не натисну"]]
+];
+
+
+function showQuestion(){
+
+ let q=questions[question];
+
+ document.getElementById("page").innerHTML=`
+
+ <div class="back" onclick="back()">← BACK</div>
+
+ <div class="pageTitle">PSYCHO TEST</div>
+
+ <div class="pageSub">QUESTION ${question+1} / ${questions.length}</div>
+
+ <div class="panel">
+
+ <h3>${q[0]}</h3>
+
+ <button class="answer" onclick="answer(0)">
+ ${q[1][0]}
+ </button>
+
+ <button class="answer" onclick="answer(1)">
+ ${q[1][1]}
+ </button>
+
+ </div>
+
+ `;
+
+}
+
+
+function answer(n){
+
+ if(n===0)score++;
+
+ question++;
+
+ if(question<questions.length){
+
+  showQuestion();
+
+ }else{
+
+  let result=
+  score<4
+  ?"ТИ УНИКАЄШ НЕБЕЗПЕКИ."
+  :score<7
+  ?"ТИ ЦІКАВИШСЯ НЕБЕЗПЕКОЮ."
+  :"ТИ САМ ЇЇ ШУКАЄШ.";
+
+  document.getElementById("page").innerHTML=`
+
+  <div class="pageTitle">RESULT</div>
+
+  <div class="panel">
+
+  <h2 class="red">${score}/10</h2>
+
+  <p>${result}</p>
+
+  <p>
+  Але найцікавіше:
+  <br><br>
+  ти відповів не на всі питання.
+  </p>
+
+  </div>
+
+  <button class="btn" onclick="back()">
+  BACK
+  </button>
+
+  `;
+
+ }
+
+}
+
+
+/* INCIDENTS */
+
+function incidentPage(){
+
+ document.getElementById("page").innerHTML=`
+
+ <div class="back" onclick="back()">← BACK</div>
+
+ <div class="pageTitle">INCIDENTS</div>
+
+ <div class="pageSub">CASE FILES</div>
+
+ ${incidentCard(1,"THE SECOND SHADOW")}
+ ${incidentCard(2,"THE EMPTY BED")}
+ ${incidentCard(3,"03:17")}
+ ${incidentCard(4,"THE PHONE CALL")}
+ ${incidentCard(5,"THE LAST PHOTO")}
+
+ `;
+
+}
+
+
+function incidentCard(n,title){
+
+ return `
+ <div class="panel">
+
+ <div class="number">INCIDENT 00${n}</div>
+
+ <h3>${title}</h3>
+
+ <p>
+ Подія зафіксована о 03:${10+n}.
+ </p>
+
+ <button class="btn"
+ onclick="investigate(${n})">
+ INVESTIGATE
+ </button>
+
+ <p id="incident${n}"></p>
+
+ </div>
+ `;
+
+}
+
+
+function investigate(n){
+
+ let arr=[
+ "",
+ "Камера бачила дві тіні. Людина була одна.",
+ "На ліжку залишився відбиток тіла. Але ніхто там не спав.",
+ "Годинник зупинився на 03:17.",
+ "Телефон подзвонив з номера, якого не існує.",
+ "На останній фотографії ти стоїш позаду себе."
+ ];
+
+ document.getElementById("incident"+n).innerHTML=
+ `<span class="red">${arr[n]}</span>`;
+
+ if(n===3)add("03:17 CLUE");
+
+}
+
+
+/* LAB */
+
+function labPage(){
+
+ document.getElementById("page").innerHTML=`
+
+ <div class="back" onclick="back()">← BACK</div>
+
+ <div class="pageTitle">EXPERIMENTS</div>
+
+ <div class="pageSub">10 EXPERIMENTS</div>
+
+ ${labCard(1,"REACTION")}
+ ${labCard(2,"THE BUTTON")}
+ ${labCard(3,"THE COLOR")}
+ ${labCard(4,"THE TIMER")}
+ ${labCard(5,"THE VOICE")}
+ ${labCard(6,"THE MIRROR")}
+ ${labCard(7,"THE ERROR")}
+ ${labCard(8,"THE NUMBER")}
+ ${labCard(9,"THE LIGHT")}
+ ${labCard(10,"FINAL EXPERIMENT")}
+
+ `;
+
+}
+
+
+function labCard(n,title){
+
+ return `
+ <div class="panel">
+
+ <div class="number">EXPERIMENT 0${n}</div>
+
+ <h3>${title}</h3>
+
+ <button class="btn" onclick="experiment(${n})">
+ START
+ </button>
+
+ <p id="lab${n}"></p>
+
+ </div>
+ `;
+
+}
+
+
+function experiment(n){
+
+ let result="";
+
+ if(n===1)
+ result="Система реагує на натискання.";
+ if(n===2)
+ result="Кнопка нічого не робить. Поки що.";
+ if(n===3)
+ result="Колір змінився.";
+ if(n===4)
+ result="Таймер зупинився на 03:17.";
+ if(n===5)
+ result="Ти почув своє ім'я?";
+ if(n===6)
+ result="Дзеркало не відображає кнопку.";
+ if(n===7)
+ result="ERROR: USER DETECTED.";
+ if(n===8){
+  result="17.";
+  add("CLUE 17");
+ }
+ if(n===9){
+  document.body.classList.add("shake");
+  setTimeout(()=>document.body.classList.remove("shake"),1000);
+  result="Світло не повинно так мигати.";
+ }
+ if(n===10)
+ result="Ти закінчив експерименти. Але вони ще не закінчили тебе.";
+
+ document.getElementById("lab"+n).innerHTML=
+ `<span class="red">${result}</span>`;
+
+}
+
+
+/* DO NOT OPEN */
+
+function doorPage(){
+
+ document.getElementById("page").innerHTML=`
+
+ <div class="back" onclick="back()">← BACK</div>
+
+ <div class="pageTitle">DO NOT OPEN</div>
+
+ <div class="panel">
+
+ <h2 class="red">
+ ОСТАННЯ ДВЕРІ
+ </h2>
+
+ <p>
+ Для відкриття потрібні три речі.
+ </p>
+
+ <p>
+ KEY<br>
+ CLUE 17<br>
+ PHOTO 17
+ </p>
+
+ <button class="btn" onclick="tryDoor()">
+ OPEN
+ </button>
+
+ <p id="doorResult"></p>
+
+ </div>
+
+ `;
+
+}
+
+
+function tryDoor(){
+
+ let ok=
+ has("KEY") &&
+ has("CLUE 17") &&
+ has("PHOTO 17");
+
+ let result=document.getElementById("doorResult");
+
+ if(!ok){
+
+  result.innerHTML=
+  `<span class="red">
+  НЕ ВИСТАЧАЄ ЧОГОСЬ.
+  </span><br><br>
+  Повернись у кімнату, галерею та загадки.`;
+
+  return;
+
+ }
+
+ document.body.classList.add("shake");
+
+ let flash=document.createElement("div");
+ flash.className="flash";
+ document.body.appendChild(flash);
+
+ setTimeout(()=>{
+
+  document.body.classList.remove("shake");
+
+  result.innerHTML=
+  `<span class="acid">
+  ACCESS GRANTED.
+  </span><br><br>
+  Двері відкрилися.<br><br>
+  За ними кімната, яку ти вже бачила.<br><br>
+  Але тепер у ній <span class="red">хтось стоїть.</span>`;
+
+ },500);
+
+}
+
+
+/* SECRET */
+
+function secret(){
+
+ if(
+ has("KEY") &&
+ has("PHOTO 17") &&
+ has("CLUE 17")
+ ){
+
+  alert(
+  "SECRET ACCESS\n\n"+
+  "Ти знайшла всі три ключі.\n\n"+
+  "Тепер шукай 03:17."
+  );
+
+ }else{
+
+  alert(
+  "ACCESS DENIED\n\n"+
+  "Ти ще не готова."
+  );
+
+ }
+
+}
+
+</script>
+
+</body>
+</html>
